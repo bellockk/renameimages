@@ -44,18 +44,18 @@ def get_time(fn):
 
 def get_name(fn):
     str_format = '%Y-%m-%d-%H-%M-%S-%f'
-    onemicrosec = datetime.timedelta(microseconds=1) 
+    onemicrosec = datetime.timedelta(microseconds=1)
     t = get_time(fn)
     fext = fn[-4:]
     while True:
-        new = os.path.join('/home','bellock','Pictures',str(t.year),'%s%s'%(t.strftime(str_format),fext)) 
+        new = os.path.join('/home','bellock','Pictures',str(t.year),'%s%s'%(t.strftime(str_format),fext))
         if os.path.basename(new) == fn:
             return None
         if not os.path.exists(new):
             return new
         t = t + onemicrosec
-    return 
-    
+    return
+
 def add_sec(t):
     return t + datetime.timedelta(seconds=1)
 
@@ -74,7 +74,7 @@ def rename_path(pth):
             fn = os.path.join(root,name)
             if fn[-4:].lower() in ['.jpg','.gif','.bmp','.tif']:
                 rename_file(fn)
-    
+
 rel_path = sys.argv[1]
 if os.path.isdir(rel_path):
     rename_path(rel_path)
