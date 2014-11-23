@@ -48,7 +48,7 @@ def get_name(fn):
     t = get_time(fn)
     fext = fn[-4:]
     while True:
-        new = os.path.join('/home','bellock','Pictures',str(t.year),'%s%s'%(t.strftime(str_format),fext))
+        new = os.path.join('/home','bellockk','Pictures',str(t.year),'%s%s'%(t.strftime(str_format),fext))
         if os.path.basename(new) == fn:
             return None
         if not os.path.exists(new):
