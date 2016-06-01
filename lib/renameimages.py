@@ -2,7 +2,6 @@
 import PIL.Image as IMG
 from PIL.ExifTags import TAGS
 import os
-import sys
 import time
 import datetime
 
@@ -47,15 +46,15 @@ def get_time(fn):
     return get_file_time(fn)
 
 
-def get_name(fn):
+def get_name(target, source):
     str_format = '%Y-%m-%d-%H-%M-%S-%f'
     onemicrosec = datetime.timedelta(microseconds=1)
-    t = get_time(fn)
-    fext = fn[-4:]
+    t = get_time(source)
+    fext = source[-4:]
     while True:
-        new = os.path.join('/home', 'bellockk', 'Pictures', str(t.year),
+        new = os.path.join(target, str(t.year),
                            '%s%s' % (t.strftime(str_format), fext))
-        if os.path.basename(new) == fn:
+        if os.path.basename(new) == source:
             return None
         if not os.path.exists(new):
             return new
@@ -67,24 +66,25 @@ def add_sec(t):
     return t + datetime.timedelta(seconds=1)
 
 
-def rename_file(fn):
-    old = os.path.abspath(fn)
-    new = get_name(fn)
+def rename_file(target, source):
+    old = os.path.abspath(source)
+    new = get_name(target, source)
     if not new:
         return
     print 'Moving: %s -> %s' % (old, new)
     os.renames(old, new)
 
 
-def rename_path(pth):
-    for root, dirs, files in os.walk(pth):
+def rename_path(target, source):
+    for root, dirs, files in os.walk(source):
         for name in files:
-            fn = os.path.join(root, name)
-            if fn[-4:].lower() in ['.jpg', '.gif', '.bmp', '.tif']:
-                rename_file(fn)
+            source = os.path.join(root, name)
+            if source[-4:].lower() in ['.jpg', '.gif', '.bmp', '.tif']:
+                rename_file(target, source)
 
-rel_path = sys.argv[1]
-if os.path.isdir(rel_path):
-    rename_path(rel_path)
-elif os.path.isfile(rel_path):
-    rename_file(sys.argv[1])
+
+def renameimages(target, source):
+    if os.path.isdir(source):
+        rename_path(target, source)
+    elif os.path.isfile(source):
+        rename_file(target, source)
